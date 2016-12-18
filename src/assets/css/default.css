@@ -129,7 +129,8 @@ a:active {
 
 button {
 	border: none;
-	padding: 0.6em 1.2em;
+	/*beautify close me */
+	/*padding: 0.6em 1.2em;*/
 	background: #c0392b;
 	color: #fff;
 	font-family: 'Lato', Calibri, Arial, sans-serif;

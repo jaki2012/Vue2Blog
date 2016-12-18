@@ -14,8 +14,6 @@ import Vue from 'vue';
 import position from '../main'
 import motto from '../main'
 
-console.log("hahah"+ motto.$data);    
-
 export default {
     methods :{
       turnAround: function(){

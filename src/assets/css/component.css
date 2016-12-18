@@ -55,7 +55,8 @@ perspective effects (not including the modals and the overlay).
 	left: 0;
 	z-index: 1000;
 	opacity: 0;
-	background: rgba(143,27,15,0.8);
+	/*remove bg color*/
+	/*background: rgba(143,27,15,0.8);*/
 	-webkit-transition: all 0.3s;
 	-moz-transition: all 0.3s;
 	transition: all 0.3s;
@@ -73,6 +74,7 @@ perspective effects (not including the modals and the overlay).
 	position: relative;
 	border-radius: 3px;
 	margin: 0 auto;
+	font-family: 'Hanyiqihei'
 }
 
 .md-content h3 {

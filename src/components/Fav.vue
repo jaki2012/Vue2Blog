@@ -7,20 +7,6 @@
             <li><a id='favcount' class="favcount"><span class='text'>{{a}}赞</span><a></li>
             <li>
                 <a class="fa-heart md-trigger" @click="fav" data-modal="modal-9">Heart</a>
-                <div class="md-modal md-effect-9" id="modal-9">
-                    <div class="md-content">
-                        <!--<h3>Modal Dialog</h3>-->
-                        <div>
-                            <p></p>
-                            <ul>
-                                <li><strong>Read:</strong> modal windows will probably tell you something important so don't
-                                    forget to read what they say.</li>
-                                <li><strong>Close:</strong> click on the button below to close the modal.</li>
-                            </ul>
-                            <button class="md-close">Close me!</button>
-                        </div>
-                    </div>
-                </div>
             </li>
             <li>
                 <router-link to="/" class="fa-reply" id="fav"></router-link>
@@ -40,19 +26,22 @@ import motto from '../main'
 import modalEffects from '../assets/js/modalEffects.js'
 
 var url = 'http://chaxun.1616.net/s.php?type=ip&output=json&callback=?&_='+Math.random();   
-var ip = ""; 
-$.getJSON(url, function(data){  
-     console.log("显示：IP【"+data.Ip+"】 地址【"+data.Isp+"】 浏览器【"+data.Browser+"】 系统【"+data.OS+"】");
-    // $("#b").html("显示：IP【"+data.Ip+"】 地址【"+data.Isp+"】 浏览器【"+data.Browser+"】 系统【"+data.OS+"】");
-    var ipsegments = data.Ip.split('.');
-    //console.log(ipsegments);
-    //ip = ipsegments[0] + ipsegments[1] + ipsegments[2] + ipsegments[3];
-    //.需要转义字符
-    var reg = /\./g  ;
-    ip = data.Ip.replace(reg,'a');
-    console.log(ip);
-});
+var ip =""; 
 
+// $.getJSON(url, function(data){  
+//      console.log("显示：IP【"+data.Ip+"】 地址【"+data.Isp+"】 浏览器【"+data.Browser+"】 系统【"+data.OS+"】");
+//     // $("#b").html("显示：IP【"+data.Ip+"】 地址【"+data.Isp+"】 浏览器【"+data.Browser+"】 系统【"+data.OS+"】");
+//     var ipsegments = data.Ip.split('.');
+//     //console.log(ipsegments);
+//     //ip = ipsegments[0] + ipsegments[1] + ipsegments[2] + ipsegments[3];
+//     //.需要转义字符
+//     var reg = /\./g  ;
+//     ip = data.Ip.replace(reg,'a');
+//     console.log(ip);
+// });
+    // $.ajaxSetup({
+    //     async: false
+    // });
 
 var config = {
   apiKey: "AIzaSyBVPxa51n5bJI5PQ9CMIAIsyGw3i5DH66w",
@@ -66,7 +55,6 @@ firebase.initializeApp(config);
 
 var rootRef = firebase.database().ref();
 var ref = firebase.database().ref('blogstate/favcount');
-console.log(ref);
 
 // var testIp = '111a222a333a344';
 // var updates = {};
@@ -76,9 +64,7 @@ console.log(ref);
 
 // Reference
 var key = ref.key;
-console.log("key"+key);
 var rootRef = ref.root;
-console.log("rootRef"+rootRef);
 
 function writeUserData(userId, name, email, imageUrl) {
     firebase.database().ref('users/' + userId).set({
@@ -89,7 +75,6 @@ function writeUserData(userId, name, email, imageUrl) {
 }
 
 function updateFavCount(newFavCount){
-    console.log("i got here");  
     firebase.database().ref("blogstate").set({
         favcount: newFavCount+1
     })
@@ -146,6 +131,8 @@ function getFavCount(){
 				removeModalHandler();
 			});
 
+            console.log("sss");
+
 		} );
 
 	}
@@ -157,7 +144,8 @@ export default {
     data() {
         return {
             a: null,
-            faved:null
+            faved:false,
+            ipRef:firebase.database().ref('ipfaved1')
         }
     },
     computed:{
@@ -165,42 +153,63 @@ export default {
             return store.state.count;
         }
     },
-    // firebase: {
-    //     favcount: ref
-    // },
     created: function() { 
       // DataSnapshot
-      console.log(this.$data.a)
       ref.on('value', function(snapshot) {
-          console.log(snapshot.val());
          this.a = snapshot.val();
       }, this.$data);
-      
+
+      $.ajax({
+  url: url,
+  dataType: 'json',
+  success: function(data) {
+     console.log("显示：IP【"+data.Ip+"】 地址【"+data.Isp+"】 浏览器【"+data.Browser+"】 系统【"+data.OS+"】");
+    // $("#b").html("显示：IP【"+data.Ip+"】 地址【"+data.Isp+"】 浏览器【"+data.Browser+"】 系统【"+data.OS+"】");
+    var ipsegments = data.Ip.split('.');
+    //console.log(ipsegments);
+    //ip = ipsegments[0] + ipsegments[1] + ipsegments[2] + ipsegments[3];
+    //.需要转义字符
+    var reg = /\./g  ;
+    ip = data.Ip.replace(reg,'a');
+    console.log(ip);
+  }
+});
+ 
+    },
+    mounted: function() {
+      init();
     },
     methods: {
         fav(){
-            init();
-            store.commit('fav')
-            //writeUserData(2,'jaki','lijiechu@qq.com','jaki.com/jaki.jpeg')
-            //updateFavCount(this.a);
-            getFavCount();
-            
-            //防止同一ip恶意刷赞
-            var favValidation = { clicked : false};
-            var ipRef = firebase.database().ref('ipfaved1/'+ip);
-            ipRef.on('value', function(snapshot) {
-                this.clicked = true;
-            }, favValidation);
+      var ipRef = this.ipRef;
+      //防止同一ip恶意刷赞
+      //在vue的生命周期中 jquery请求都会在vue实例完成后才执行完
+      console.log("haha"+ip);
+      ipRef = ipRef.child(ip);
+      console.log(ipRef.key);
 
-            if(favValidation.clicked){
-                updateFavCount(this.a);
-                var updates = {};
-                updates[ip] = 1;
-                console.log(ipRef,ipRef.parent);
-                ipRef.parent.update(updates);
-            }else {
-                alert('you have faved!');
-            }
+
+      //异步请求永远存在数据不同步问题。
+      ipRef.once('value',function(snapshot){
+          if(null != snapshot.val()){
+              console.log(snapshot.val())
+              this.faved = true;
+          }else{
+              this.faved = false;
+          }
+          store.commit('fav')
+          //writeUserData(2,'jaki','lijiechu@qq.com','jaki.com/jaki.jpeg')
+          console.log("favValidation"+this.faved);
+          if(!this.faved){
+              updateFavCount(this.a);
+              var updates = {};
+              updates[ip] = 1;
+              var ipRef = firebase.database().ref('ipfaved1/');
+              ipRef.update(updates);
+           } else {
+               alert('you have faved!');
+           }
+      },this.$data);
         },
         update(newValue){
             this.a = newValue;
