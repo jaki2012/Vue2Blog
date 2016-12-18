@@ -12,6 +12,9 @@
 		<!--[if lte IE 8]><script src="assets/js/html5shiv.js"></script><![endif]-->
 		<link rel="stylesheet" href="assets/css/main.css" />
 		<link href="images/favicon.ico" type="image/x-icon" rel=icon>
+		<link rel="stylesheet" type="text/css" href="assets/css/default.css" />
+		<link rel="stylesheet" type="text/css" href="assets/css/component.css" />
+		<script src="assets/js/modernizr.custom.js"></script>
 		<!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css" /><![endif]-->
 		<!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
@@ -81,6 +84,8 @@
 
 			</div>
 
+			<div class="md-overlay"></div><!-- the overlay element -->
+
 		<!-- Scripts -->
 			<!--[if lte IE 8]><script src="assets/js/respond.min.js"></script><![endif]-->
 			<script>
@@ -89,6 +94,21 @@
 					document.body.className += (navigator.userAgent.match(/(MSIE|rv:11\.0)/) ? ' is-ie' : '');
 				}
 			</script>
+
+					
+
+		<!-- classie.js by @desandro: https://github.com/desandro/classie -->
+		<script src="assets/js/classie.js"></script>
+		<!--<script src="assets/js/modalEffects.js"></script>-->
+
+		<!-- for the blur effect -->
+		<!-- by @derSchepp https://github.com/Schepp/CSS-Filters-Polyfill -->
+		<script>
+			// this is important for IEs
+			var polyfilter_scriptpath = 'assets/js/';
+		</script>
+		<script src="assets/js/cssParser.js"></script>
+		<script src="assets/js/css-filters-polyfill.js"></script>
 
 	</body>
 </html>

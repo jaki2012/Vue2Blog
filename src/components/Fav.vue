@@ -5,7 +5,23 @@
                 <p>已有{{}}人为他点过赞！</p>
             </li>-->
             <li><a id='favcount' class="favcount"><span class='text'>{{a}}赞</span><a></li>
-            <li><a class="fa-heart" @click="fav">Heart</a></li>
+            <li>
+                <a class="fa-heart md-trigger" @click="fav" data-modal="modal-9">Heart</a>
+                <div class="md-modal md-effect-9" id="modal-9">
+                    <div class="md-content">
+                        <!--<h3>Modal Dialog</h3>-->
+                        <div>
+                            <p></p>
+                            <ul>
+                                <li><strong>Read:</strong> modal windows will probably tell you something important so don't
+                                    forget to read what they say.</li>
+                                <li><strong>Close:</strong> click on the button below to close the modal.</li>
+                            </ul>
+                            <button class="md-close">Close me!</button>
+                        </div>
+                    </div>
+                </div>
+            </li>
             <li>
                 <router-link to="/" class="fa-reply" id="fav"></router-link>
             </li>
@@ -18,8 +34,25 @@
 import Vue from 'vue';
 import firebase from 'firebase'
 import {store} from '../store'
+import $ from 'jquery'
 import position from '../main'
 import motto from '../main' 
+import modalEffects from '../assets/js/modalEffects.js'
+
+var url = 'http://chaxun.1616.net/s.php?type=ip&output=json&callback=?&_='+Math.random();   
+var ip = ""; 
+$.getJSON(url, function(data){  
+     console.log("显示：IP【"+data.Ip+"】 地址【"+data.Isp+"】 浏览器【"+data.Browser+"】 系统【"+data.OS+"】");
+    // $("#b").html("显示：IP【"+data.Ip+"】 地址【"+data.Isp+"】 浏览器【"+data.Browser+"】 系统【"+data.OS+"】");
+    var ipsegments = data.Ip.split('.');
+    //console.log(ipsegments);
+    //ip = ipsegments[0] + ipsegments[1] + ipsegments[2] + ipsegments[3];
+    //.需要转义字符
+    var reg = /\./g  ;
+    ip = data.Ip.replace(reg,'a');
+    console.log(ip);
+});
+
 
 var config = {
   apiKey: "AIzaSyBVPxa51n5bJI5PQ9CMIAIsyGw3i5DH66w",
@@ -34,6 +67,12 @@ firebase.initializeApp(config);
 var rootRef = firebase.database().ref();
 var ref = firebase.database().ref('blogstate/favcount');
 console.log(ref);
+
+// var testIp = '111a222a333a344';
+// var updates = {};
+// updates[testIp] = 2;
+// var testRef = firebase.database().ref('ipfaved1');
+// testRef.update(updates);
 
 // Reference
 var key = ref.key;
@@ -50,8 +89,16 @@ function writeUserData(userId, name, email, imageUrl) {
 }
 
 function updateFavCount(newFavCount){
+    console.log("i got here");  
     firebase.database().ref("blogstate").set({
-        favcount: newFavCount
+        favcount: newFavCount+1
+    })
+}
+
+function updateFavedIp(ip){
+    console.log("");
+    firebase.database().ref("ipfaved").set({
+        
     })
 }
 
@@ -61,13 +108,56 @@ function getFavCount(){
     });   
 }
 
+	function init() {
+
+		var overlay = document.querySelector( '.md-overlay' );
+
+		[].slice.call( document.querySelectorAll( '.md-trigger' ) ).forEach( function( el, i ) {
+
+			var modal = document.querySelector( '#' + el.getAttribute( 'data-modal' ) ),
+				close = modal.querySelector( '.md-close' );
+
+			function removeModal( hasPerspective ) {
+				classie.remove( modal, 'md-show' );
+
+				if( hasPerspective ) {
+					classie.remove( document.documentElement, 'md-perspective' );
+				}
+			}
+
+			function removeModalHandler() {
+				removeModal( classie.has( el, 'md-setperspective' ) ); 
+			}
+
+			el.addEventListener( 'click', function( ev ) {
+				classie.add( modal, 'md-show' );
+				overlay.removeEventListener( 'click', removeModalHandler );
+				overlay.addEventListener( 'click', removeModalHandler );
+
+				if( classie.has( el, 'md-setperspective' ) ) {
+					setTimeout( function() {
+						classie.add( document.documentElement, 'md-perspective' );
+					}, 25 );
+				}
+			});
+
+			close.addEventListener( 'click', function( ev ) {
+				ev.stopPropagation();
+				removeModalHandler();
+			});
+
+		} );
+
+	}
+
 //writeUserData(1,'jaki','lijiechu@qq.com','jaki.com/jaki.jpeg')
 // The "data" option should be a function that returns a per-instance value in component definitions. 
 
 export default {
     data() {
         return {
-            a: null
+            a: null,
+            faved:null
         }
     },
     computed:{
@@ -89,10 +179,28 @@ export default {
     },
     methods: {
         fav(){
+            init();
             store.commit('fav')
             //writeUserData(2,'jaki','lijiechu@qq.com','jaki.com/jaki.jpeg')
-            updateFavCount(store.state.count)
+            //updateFavCount(this.a);
             getFavCount();
+            
+            //防止同一ip恶意刷赞
+            var favValidation = { clicked : false};
+            var ipRef = firebase.database().ref('ipfaved1/'+ip);
+            ipRef.on('value', function(snapshot) {
+                this.clicked = true;
+            }, favValidation);
+
+            if(favValidation.clicked){
+                updateFavCount(this.a);
+                var updates = {};
+                updates[ip] = 1;
+                console.log(ipRef,ipRef.parent);
+                ipRef.parent.update(updates);
+            }else {
+                alert('you have faved!');
+            }
         },
         update(newValue){
             this.a = newValue;
