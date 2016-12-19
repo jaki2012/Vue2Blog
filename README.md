@@ -1,4 +1,6 @@
 # vue-blog
+## A personal blog built with vue.js 2.0
+### using ```vue-cli``` ```vue-router``` ```firebase```
 
 > Jaki personal blog
 
@@ -16,4 +18,4 @@ npm run build
 ```
 
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
-# Vue2Blog
+
