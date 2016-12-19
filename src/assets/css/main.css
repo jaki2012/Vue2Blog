@@ -1,6 +1,7 @@
 @charset "UTF-8";
 @import url(font-awesome.min.css);
-@import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:300");
+/*@import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:300");*/
+@import url(./google-fonts.css);
 
 /*
 	Identity by HTML5 UP
@@ -219,6 +220,18 @@
 
 	h6 {
 		font-size: 1em;
+	}
+
+	.font-spider-extra {
+		display: none;
+	}
+
+	.hyqh p{
+		font-family: "Hanyiqihei"
+	}
+
+	.googlesans p{
+		font-family: "Source Sans Pro"
 	}
 
 	#motto {
@@ -474,8 +487,7 @@
 	@font-face {
 		font-family: 'Hanyiqihei';
 		src:
-		    url('../fonts/HYQiHei_35S5.ttf') format('truetype'),
-		    url('../fonts/HYQiHeiX1_35W.otf') format('opentype');
+		    url('../fonts/HYQiHei_35S5.ttf') format('truetype');
 		font-weight: normal;
 		font-style: normal;
 	}

@@ -1,14 +1,8 @@
 <template>
     <footer>
         <ul class="icons">
-            <li class="favfail md-trigger" data-modal="modal-9">
-                <p>已有{{}}人为他点过赞！</p>
-            </li>
-            <li class="favsuccess md-trigger" data-modal="modal-10">
-                <p>已有{{}}人为他点过赞！</p>
-            </li>
             <li><a id='favcount' class="favcount"><span class='text'>{{a}}赞</span><a></li>
-            <li>
+            <li> 
                 <a class="fa-heart" @click="fav">Heart</a>
             </li>
             <li>
@@ -16,6 +10,10 @@
             </li>
             <p>点击心形图标为芒果侠集赞!</p>
         </ul>
+        <li class="favfail md-trigger" data-modal="modal-9">
+        </li>
+        <li class="favsuccess md-trigger" data-modal="modal-10">
+        </li>
     </footer>
 </template>
 
@@ -242,13 +240,12 @@ export default {
         font-size: 70%;
         color: #ff7496;
     }
-
+    
     .favsuccess {
         display: none !important;
     }
-
+    
     .favfail {
         display: none !important;
     }
-
 </style>
