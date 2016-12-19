@@ -7,6 +7,9 @@ var baseWebpackConfig = require('./webpack.base.conf')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 var env = config.build.env
+var helpers = require('../config/helpers');
+//用于将原来模板的资源直接拷贝到dist目录中
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 var webpackConfig = merge(baseWebpackConfig, {
   module: {
@@ -15,6 +18,7 @@ var webpackConfig = merge(baseWebpackConfig, {
   devtool: config.build.productionSourceMap ? '#source-map' : false,
   output: {
     path: config.build.assetsRoot,
+    publicPath:'/',
     filename: utils.assetsPath('js/[name].[chunkhash].js'),
     chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
   },
@@ -54,6 +58,17 @@ var webpackConfig = merge(baseWebpackConfig, {
       // necessary to consistently work with multiple chunks via CommonsChunkPlugin
       chunksSortMode: 'dependency'
     }),
+    new CopyWebpackPlugin([
+      {
+        //from: __dirname + '../public',
+        from: helpers.root('src','assets'),
+        to:helpers.root('dist','assets')
+      },
+      {
+        from: helpers.root('src','images'),
+        to:helpers.root('dist','images')
+      }
+    ]),
     // split vendor js into its own file
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',

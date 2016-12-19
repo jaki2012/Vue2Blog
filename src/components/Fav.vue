@@ -1,12 +1,15 @@
 <template>
     <footer>
         <ul class="icons">
-            <!--<li class="favforjaki">
+            <li class="favfail md-trigger" data-modal="modal-9">
                 <p>已有{{}}人为他点过赞！</p>
-            </li>-->
+            </li>
+            <li class="favsuccess md-trigger" data-modal="modal-10">
+                <p>已有{{}}人为他点过赞！</p>
+            </li>
             <li><a id='favcount' class="favcount"><span class='text'>{{a}}赞</span><a></li>
             <li>
-                <a class="fa-heart md-trigger" @click="fav" data-modal="modal-9">Heart</a>
+                <a class="fa-heart" @click="fav">Heart</a>
             </li>
             <li>
                 <router-link to="/" class="fa-reply" id="fav"></router-link>
@@ -21,8 +24,6 @@ import Vue from 'vue';
 import firebase from 'firebase'
 import {store} from '../store'
 import $ from 'jquery'
-import position from '../main'
-import motto from '../main' 
 import modalEffects from '../assets/js/modalEffects.js'
 
 var url = 'http://chaxun.1616.net/s.php?type=ip&output=json&callback=?&_='+Math.random();   
@@ -126,12 +127,12 @@ function getFavCount(){
 				}
 			});
 
+            console.log(el);
+
 			close.addEventListener( 'click', function( ev ) {
 				ev.stopPropagation();
 				removeModalHandler();
 			});
-
-            console.log("sss");
 
 		} );
 
@@ -206,8 +207,11 @@ export default {
               updates[ip] = 1;
               var ipRef = firebase.database().ref('ipfaved1/');
               ipRef.update(updates);
+              $('.favsuccess').click();
+              //alert('点赞成功！')
            } else {
-               alert('you have faved!');
+               $('.favfail').click();
+               //alert('you have faved!');
            }
       },this.$data);
         },
@@ -238,4 +242,13 @@ export default {
         font-size: 70%;
         color: #ff7496;
     }
+
+    .favsuccess {
+        display: none !important;
+    }
+
+    .favfail {
+        display: none !important;
+    }
+
 </style>

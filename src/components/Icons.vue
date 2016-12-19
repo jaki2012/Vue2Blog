@@ -11,15 +11,4 @@
 
 <script>
 import Vue from 'vue';
-import position from '../main'
-import motto from '../main'
-
-export default {
-    methods :{
-      turnAround: function(){
-      position.show = !position.show;
-      motto.show = !motto.show;
-    }
-  }
-}
 </script>
