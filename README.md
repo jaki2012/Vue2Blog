@@ -19,3 +19,11 @@ npm run build
 
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
 
+Notes:
+For Apple devices, it's not supported well. (e.g. iphone6s, mac safari)
+I post a discussion here:
+https://segmentfault.com/q/1010000007855474
+Any one knows why could tell me, I am wishing to hear your voice!:
+```
+lijiechu@qq.com
+```
